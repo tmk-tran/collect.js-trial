@@ -1,0 +1,1 @@
+export const border = { border: "1px solid red" };
