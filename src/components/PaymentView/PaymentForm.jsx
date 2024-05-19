@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { Button } from "@mui/material";
 
 function PaymentForm() {
-  const [scriptLoaded, setScriptLoaded] = useState(false);
+  // useRef here is used to check if the script has been loaded
+  // ensures that the script is only loaded once
+  const scriptLoaded = useRef(false);
 
   useEffect(() => {
-    if (!scriptLoaded && document.body) {
-      const customCss = {
-        "border-style": "solid",
-        "border-color": "#c7c7c7",
-        "border-width": "1px",
-        "border-radius": "3px",
-        padding: "6px",
-        "font-size": "16px",
-        height: "33px",
-      };
+    // from collect.js tutorial
+    const customCss = {
+      "border-style": "solid",
+      "border-color": "#c7c7c7",
+      "border-width": "1px",
+      "border-radius": "3px",
+      padding: "6px",
+      "font-size": "16px",
+      height: "33px",
+    };
 
+    const loadScript = () => {
       const script = document.createElement("script");
       script.src = "https://secure.transactiongateway.com/token/Collect.js";
       script.async = true;
@@ -30,17 +34,27 @@ function PaymentForm() {
       script.setAttribute("data-field-ccexp-placeholder", "10 / 22");
       script.setAttribute("data-field-cvv-placeholder", "123");
       script.setAttribute("data-custom-css", JSON.stringify(customCss));
+
       document.body.appendChild(script);
 
-      setScriptLoaded(true);
+      scriptLoaded.current = true;
+    };
 
-      return () => {
-        document.body.removeChild(script);
-      };
+    if (!scriptLoaded.current) {
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", loadScript);
+      } else {
+        loadScript();
+      }
     }
-  }, [scriptLoaded]);
 
-  console.log("log test");
+    return () => {
+      if (scriptLoaded.current) {
+        // Cleanup code if needed
+        // document.body.removeChild(script);
+      }
+    };
+  }, []);
 
   return (
     <form>
