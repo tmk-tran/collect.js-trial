@@ -94,7 +94,7 @@
 //           <input
 //             type="text"
 //             id="first_name"
-//             style={{ ...customCss, width: "99.8%", padding: 0 }}
+//             style={{ ...customCss, ...customWidth}}
 //           />
 //         </div>
 //         {/* ~~~~~ LAST NAME ~~~~~ */}
@@ -106,7 +106,7 @@
 //           <input
 //             type="text"
 //             id="last_name"
-//             style={{ ...customCss, width: "99.8%", padding: 0 }}
+//             style={{ ...customCss, ...customWidth}}
 //           />
 //         </div>
 //       </div>
@@ -119,7 +119,7 @@
 //       <input
 //         type="text"
 //         id="address"
-//         style={{ ...customCss, width: "99.8%", padding: 0 }}
+//         style={{ ...customCss, ...customWidth}}
 //       />
 //       <br />
 //       <br />
@@ -196,7 +196,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Stepper, Step, StepLabel } from "@mui/material";
-import { flexRowSpace } from "../Utils/pageStyles";
+import { flexRowSpace, fullWidth } from "../Utils/pageStyles";
+import { border } from "../Utils/colors";
 
 const fieldLabelStyle = {
   display: "block",
@@ -205,24 +206,49 @@ const fieldLabelStyle = {
   color: "ghostwhite",
 };
 
+const customWidth = {
+  width: "99.8%",
+  padding: 0,
+};
+
+const formContainer = {
+  width: "90%",
+  margin: "0 auto",
+};
+
 const customCss = {
-  "border-style": "solid",
-  "border-color": "#c7c7c7",
-  "border-width": "1px",
-  "border-radius": "10px",
+  borderStyle: "solid",
+  borderColor: "#c7c7c7",
+  borderWidth: "1px",
+  borderRadius: "10px",
   padding: "6px",
-  "font-size": "16px",
+  fontSize: "16px",
   height: "56px",
-  "background-color": "transparent",
+  backgroundColor: "transparent",
 };
 
 function PaymentForm() {
   const [activeStep, setActiveStep] = useState(0);
-  console.log(activeStep);
+  const [loading, setLoading] = useState(true);
+  const [showLabels, setShowLabels] = useState(false);
+  console.log(showLabels);
 
   const scriptLoaded = useRef(false);
+  console.log(scriptLoaded);
 
   useEffect(() => {
+    // need to send via json below for collect.js
+    const customCss = {
+      "border-style": "solid",
+      "border-color": "#c7c7c7",
+      "border-width": "1px",
+      "border-radius": "10px",
+      padding: "6px",
+      "font-size": "16px",
+      height: "56px",
+      color: "white",
+      "background-color": "transparent", // match the background color
+    };
     const loadScript = () => {
       const script = document.createElement("script");
       script.src = "https://secure.transactiongateway.com/token/Collect.js";
@@ -261,6 +287,50 @@ function PaymentForm() {
     };
   }, [activeStep]);
 
+  useEffect(() => {
+    if (scriptLoaded.current === true) {
+      console.log("true");
+      setLoading(false);
+    }
+    // Simulate loading delay
+    setTimeout(() => {
+      setShowLabels(true);
+    }, 4000);
+
+    // Cleanup function
+    return () => {
+      // Reset state
+      setLoading(true);
+      setShowLabels(false);
+    };
+  }, [activeStep]);
+  console.log(loading);
+  console.log(showLabels);
+
+  // useEffect(() => {
+  //   if (activeStep === 2) {
+  //     const observer = new MutationObserver((mutations) => {
+  //       const ccNumberElement = document.getElementById("ccnumber");
+  //       const ccExpElement = document.getElementById("ccexp");
+  //       const cvvElement = document.getElementById("cvv");
+
+  //       if (ccNumberElement && ccExpElement && cvvElement) {
+  //         setLoading(false);
+  //         observer.disconnect();
+  //       }
+  //     });
+
+  //     observer.observe(document.body, {
+  //       childList: true,
+  //       subtree: true,
+  //     });
+
+  //     return () => {
+  //       observer.disconnect();
+  //     };
+  //   }
+  // }, [activeStep]);
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -276,34 +346,57 @@ function PaymentForm() {
       case 0:
         return (
           <>
-            <div style={{ width: "100%" }}>
-              <label htmlFor="first_name" style={fieldLabelStyle}>
-                First Name
-              </label>
+            <br />
+            <br />
+            <div style={formContainer}>
+              {/* ~~~~~ FIRST NAME ~~~~~ */}
+              <div style={fullWidth}>
+                <label htmlFor="first_name" style={fieldLabelStyle}>
+                  First Name
+                </label>
+                <br />
+                <input
+                  type="text"
+                  id="first_name"
+                  style={{ ...customCss, ...customWidth }}
+                />
+              </div>
               <br />
-              <input
-                type="text"
-                id="first_name"
-                style={{ ...customCss, width: "99.8%", padding: 0 }}
-              />
-            </div>
-            <div style={{ width: "100%" }}>
-              <label htmlFor="last_name" style={fieldLabelStyle}>
-                Last Name
-              </label>
+              {/* ~~~~~ LAST NAME ~~~~~ */}
+              <div style={fullWidth}>
+                <label htmlFor="last_name" style={fieldLabelStyle}>
+                  Last Name
+                </label>
+                <br />
+                <input
+                  type="text"
+                  id="last_name"
+                  style={{ ...customCss, ...customWidth }}
+                />
+              </div>
               <br />
-              <input
-                type="text"
-                id="last_name"
-                style={{ ...customCss, width: "99.8%", padding: 0 }}
-              />
+              {/* ~~~~~ EMAIL ~~~~~ */}
+              <div style={fullWidth}>
+                <label htmlFor="email" style={fieldLabelStyle}>
+                  Email
+                </label>
+                <br />
+                <input
+                  type="text"
+                  id="email"
+                  style={{ ...customCss, ...customWidth }}
+                />
+              </div>
             </div>
           </>
         );
       case 1:
         return (
           <>
-            <div>
+            <br />
+            <br />
+            <div style={formContainer}>
+              {/* ~~~~~ ADDRESS ~~~~~ */}
               <label htmlFor="address" style={fieldLabelStyle}>
                 Address
               </label>
@@ -311,42 +404,48 @@ function PaymentForm() {
               <input
                 type="text"
                 id="address"
-                style={{ ...customCss, width: "99.8%", padding: 0 }}
+                style={{ ...customCss, ...customWidth }}
               />
-            </div>
-            <div style={{ ...flexRowSpace, gap: "25px" }}>
-              <div style={{ width: "100%" }}>
-                <label htmlFor="city" style={fieldLabelStyle}>
-                  City
-                </label>
-                <br />
-                <input
-                  type="text"
-                  id="city"
-                  style={{ ...customCss, width: "100%", padding: 0 }}
-                />
-              </div>
-              <div>
-                <label htmlFor="state" style={fieldLabelStyle}>
-                  State
-                </label>
-                <br />
-                <input
-                  type="text"
-                  id="state"
-                  style={{ ...customCss, padding: 0 }}
-                />
-              </div>
-              <div>
-                <label htmlFor="zip" style={fieldLabelStyle}>
-                  Zip Code
-                </label>
-                <br />
-                <input
-                  type="text"
-                  id="zip"
-                  style={{ ...customCss, padding: 0 }}
-                />
+              <br />
+              <br />
+              {/* ~~~~~ CITY ~~~~~ */}
+              <div style={{ ...flexRowSpace, gap: "25px" }}>
+                <div style={fullWidth}>
+                  <label htmlFor="city" style={fieldLabelStyle}>
+                    City
+                  </label>
+                  <br />
+                  <input
+                    type="text"
+                    id="city"
+                    style={{ ...customCss, ...fullWidth, padding: 0 }}
+                  />
+                </div>
+                {/* ~~~~~ STATE ~~~~~ */}
+                <div>
+                  <label htmlFor="state" style={fieldLabelStyle}>
+                    State
+                  </label>
+                  <br />
+                  <input
+                    type="text"
+                    id="state"
+                    style={{ ...customCss, padding: 0 }}
+                  />
+                  <br />
+                </div>
+                {/* ~~~~~ ZIP ~~~~~ */}
+                <div>
+                  <label htmlFor="zip" style={fieldLabelStyle}>
+                    Zip Code
+                  </label>
+                  <br />
+                  <input
+                    type="text"
+                    id="zip"
+                    style={{ ...customCss, padding: 0 }}
+                  />
+                </div>
               </div>
             </div>
           </>
@@ -354,27 +453,42 @@ function PaymentForm() {
       case 2:
         return (
           <>
-            <div>
-              <label htmlFor="ccnumber" style={fieldLabelStyle}>
-                Card Number
-              </label>
+            <br />
+            <br />
+            <div style={formContainer}>
+              {/* ~~~~~ CC INFO FIELDS ~~~~~ */}
+              {showLabels && (
+                <label htmlFor="ccnumber" style={fieldLabelStyle}>
+                  Card Number
+                </label>
+              )}
               <br />
               <div id="ccnumber" aria-label="Card Number"></div>
-            </div>
-            <div style={{ ...flexRowSpace, gap: "40px" }}>
-              <div style={{ width: "100%" }}>
-                <label htmlFor="ccexp" style={fieldLabelStyle}>
-                  Expiration Date
-                </label>
-                <br />
-                <div id="ccexp" aria-label="Expiry Date"></div>
-              </div>
-              <div style={{ width: "100%" }}>
-                <label htmlFor="cvv" style={fieldLabelStyle}>
-                  CVV
-                </label>
-                <br />
-                <div id="cvv" aria-label="CVV"></div>
+              <br />
+              <br />
+              <div style={{ ...flexRowSpace, gap: "40px" }}>
+                <div style={fullWidth}>
+                  {showLabels && (
+                    <label htmlFor="ccexp" style={fieldLabelStyle}>
+                      Expiration Date
+                    </label>
+                  )}
+                  <br />
+                  <div id="ccexp" aria-label="Expiry Date"></div>
+                  <br />
+                  <br />
+                </div>
+                <div style={fullWidth}>
+                  {showLabels && (
+                    <label htmlFor="cvv" style={fieldLabelStyle}>
+                      CVV
+                    </label>
+                  )}
+                  <br />
+                  <div id="cvv" aria-label="CVV"></div>
+                  <br />
+                  <br />
+                </div>
               </div>
             </div>
           </>
@@ -385,7 +499,7 @@ function PaymentForm() {
   };
 
   return (
-    <form>
+    <form style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>
@@ -393,8 +507,8 @@ function PaymentForm() {
           </Step>
         ))}
       </Stepper>
-      <div>{getStepContent(activeStep)}</div>
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ flexGrow: 1 }}>{getStepContent(activeStep)}</div>
+      <div style={{ marginTop: "50px" }}>
         <Button disabled={activeStep === 0} onClick={handleBack}>
           Back
         </Button>
@@ -404,7 +518,7 @@ function PaymentForm() {
           onClick={handleNext}
           style={{ marginLeft: "10px" }}
         >
-          {activeStep === steps.length - 1 ? "Finish" : "Next"}
+          {activeStep === steps.length - 1 ? "Submit" : "Next"}
         </Button>
       </div>
     </form>

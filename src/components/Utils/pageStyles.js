@@ -9,3 +9,7 @@ export const flexRowSpace = {
   flexDirection: "row",
   justifyContent: "space-between",
 };
+
+export const fullWidth = {
+  width: "100%",
+};
