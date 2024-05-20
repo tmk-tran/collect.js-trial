@@ -5,6 +5,11 @@ import "./App.css";
 import PaymentView from "../PaymentView/PaymentView";
 
 const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#00a79d', // Devii button color
+    },
+  },
   typography: {
     fontFamily: [
       'Nunito',
@@ -13,6 +18,7 @@ const theme = createTheme({
       'Arial',
       'sans-serif',
     ].join(','),
+    fontSize: 18, // Set the default font size for the entire application
   },
 });
 
