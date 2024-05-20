@@ -1,21 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Button, TextField, useTheme } from "@mui/material";
-
-const textFieldStyle = (theme) => ({
-  borderRadius: 3,
-  "& .MuiOutlinedInput-root": {
-    borderRadius: 3,
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: "ghostwhite", // Change this to your desired hover color
-    },
-    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-      borderColor: "green", // Change this to your desired focused color
-    },
-  },
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: theme.palette.grey[700], // Initial border color
-  },
-});
+import React, { useEffect, useRef } from "react";
+import { Button } from "@mui/material";
 
 const fieldLabelStyle = {
   display: "block",
@@ -25,7 +9,6 @@ const fieldLabelStyle = {
 };
 
 function PaymentForm() {
-  const theme = useTheme();
   // useRef here is used to check if the script has been loaded
   // ensures that the script is only loaded once
   const scriptLoaded = useRef(false);
@@ -90,12 +73,16 @@ function PaymentForm() {
       <div id="ccnumber" aria-label="Card Number"></div>
       <br />
       <br />
-      <label htmlFor="ccexp" style={fieldLabelStyle}>Expiry Date</label>
+      <label htmlFor="ccexp" style={fieldLabelStyle}>
+        Expiry Date
+      </label>
       <br />
       <div id="ccexp" aria-label="Expiry Date"></div>
       <br />
       <br />
-      <label htmlFor="cvv" style={fieldLabelStyle}>CVV</label>
+      <label htmlFor="cvv" style={fieldLabelStyle}>
+        CVV
+      </label>
       <br />
       <div id="cvv" aria-label="CVV"></div>
       <br />
@@ -103,45 +90,6 @@ function PaymentForm() {
       <Button fullWidth variant="contained" sx={{ borderRadius: 50 }}>
         Submit
       </Button>
-      {/* <TextField
-        fullWidth
-        sx={textFieldStyle}
-        variant="outlined"
-        // label="Card Number"
-        InputProps={{
-          inputComponent: "div",
-          inputProps: { id: "ccnumber" },
-        }}
-      />
-      <br />
-      <br />
-      <TextField
-        fullWidth
-        sx={textFieldStyle}
-        variant="outlined"
-        // label="Expiry Date"
-        InputProps={{
-          inputComponent: "div",
-          inputProps: { id: "ccexp" },
-        }}
-      />
-      <br />
-      <br />
-      <TextField
-        fullWidth
-        sx={textFieldStyle}
-        variant="outlined"
-        // label="CVV"
-        InputProps={{
-          inputComponent: "div",
-          inputProps: { id: "cvv" },
-        }}
-      />
-      <br />
-      <br />
-      <Button fullWidth variant="contained" sx={{ borderRadius: 50 }}>
-        Submit
-      </Button> */}
     </form>
   );
 }
