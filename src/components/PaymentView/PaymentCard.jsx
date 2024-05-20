@@ -13,7 +13,7 @@ export default function PaymentCard() {
   return (
     <Card sx={cardStyle}>
       <CardContent>
-        <Typography variant="h5" sx={{ color: "white" }}>
+        <Typography variant="h5" sx={{ color: "white", mb: 5 }}>
           Payment
         </Typography>
         <PaymentForm />

@@ -3,3 +3,9 @@ export const flexCenter = {
   justifyContent: "center",
   alignItems: "center",
 };
+
+export const flexRowSpace = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+};
